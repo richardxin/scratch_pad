@@ -19,7 +19,7 @@ import com.fasterxml.jackson.core.JsonParser;
 
 public class TarDemo {
 	//private TarArchiveInputStream tarArchiveInputStream;
-	private static Pattern recordIdPattern = Pattern.compile("([^/]+)\\.json$");
+	private static Pattern RECORDID_PATTERN = Pattern.compile("([^/]+)\\.json$");
 	
 	private static boolean print2Console = true;
 	private static boolean parseJson = true;
@@ -47,7 +47,7 @@ public class TarDemo {
 	}
 
 	private String extractId(String name) {
-		Matcher matcher = recordIdPattern.matcher(name);
+		Matcher matcher = RECORDID_PATTERN.matcher(name);
 		if (matcher.find()) {
 			return matcher.group(1);
 		} else {
@@ -84,6 +84,7 @@ public class TarDemo {
 			}
 			long timestamp2 = System.currentTimeMillis();
 			System.out.println("time spent on this (second): "+ (timestamp2 - timestamp1)/1000);
+			System.out.println("# of entries:" + counter);
 			tarArchive.close();
 		} catch (IOException e) {
 			throw new RuntimeException(e);
