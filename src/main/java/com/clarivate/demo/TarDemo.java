@@ -22,6 +22,7 @@ public class TarDemo {
 	private static Pattern recordIdPattern = Pattern.compile("([^/]+)\\.json$");
 	
 	private static boolean print2Console = true;
+	private static boolean parseJson = true;
 
 	public static void main(String... args) throws FileNotFoundException {
 		String filePath = "data/drug-2016-11-14_1519-all-pp.json.tar.gz";
@@ -32,6 +33,9 @@ public class TarDemo {
                     break;
                 case "--print-to-console":
                 	print2Console = Boolean.parseBoolean(args[++i]);
+                	break;
+                case "--parse-json":
+                	parseJson = Boolean.parseBoolean(args[++i]);
              }
 		}
 		
@@ -65,9 +69,15 @@ public class TarDemo {
 					String recordId = extractId(entry.getName());
 					byte[] ba = new byte[(int) entry.getSize()];
 					tarArchive.read(ba, 0, ba.length);
-					String currentValue = validateAndRemoveWhitespace(new String(ba));
-					if (print2Console)
+					
+					String currentValue =new String(ba);
+					if (parseJson){
+						currentValue = validateAndRemoveWhitespace(currentValue);
+					}
+					
+					if (print2Console){
 						System.out.println(counter + ":" + recordId + ":" + currentValue);
+					}
 					counter++;
 				}
 				entry = tarArchive.getNextTarEntry();
